@@ -1,2 +1,1 @@
-manage.py runserver
-pause
+workon regionenraten & manage.py runserver & pause

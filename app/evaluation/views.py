@@ -8,7 +8,7 @@ import datetime
 def start(request):
 	"""Startseite."""
 	if not request.user.is_authenticated():
-		return redirect('regionenraten_login')regionenraten
+		return redirect('regionenraten_login')
 	aSeite = 0
 	if 'seite' in request.GET and request.GET.get('seite'):
 		aSeite = int(request.GET.get('seite'))
