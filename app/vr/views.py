@@ -8,10 +8,6 @@ from django.db.models import Sum, Count
 import os
 import json
 
-pTypen = [
-	{'s': 'S', 't': 'Standard'},
-	{'s': 'D', 't': 'Dialekt'}
-]
 pOrte = [
 	{'s': 'GAW', 'sf': 'GAW', 't': 'Gaweinstal', 'bl': 'Niederösterreich', 'dr': 'Ostmittelbairisch', 'cy': 420.4, 'cx': 2725.5},
 	{'s': 'HÜT', 'sf': 'HUET', 't': 'Hüttschlag', 'bl': 'Salzburg', 'dr': 'Südmittelbairisch', 'cy': 1126.2, 'cx': 1503.1},
@@ -37,23 +33,13 @@ pOrte = [
 	{'s': 'STP', 'sf': 'STP', 't': 'St.Pölten', 'bl': 'Niederösterreich', 'dr': 'Ostmittelbairisch', 'cy': 568.4, 'cx': 2374.5, 'top': True},
 	{'s': 'WIE', 'sf': 'WIE', 't': 'Wien', 'bl': 'Wien', 'dr': 'Ostmittelbairisch', 'cy': 571.2, 'cx': 2645.5},
 ]
-pAlter = [
-	{'s': 'j', 't': 'jung'},
-	{'s': 'a', 't': 'alt'}
-]
-pSaetze = [
-	{'s': '02', 't': '02'},
-	{'s': '05', 't': '05'},
-	{'s': '12', 't': '12'},
-	{'s': '28', 't': '28'}
-]
 
 
 def start(request):
 	"""Startseite."""
 	return render_to_response(
 		'vr/start.html',
-		RequestContext(request, {'mediaUrl': settings.MEDIA_URL, 'gData': {'typ': pTypen, 'orte': pOrte, 'alter': pAlter, 'saetze': pSaetze}}),)
+		RequestContext(request, {'mediaUrl': settings.MEDIA_URL, 'gData': {'orte': pOrte}}),)
 
 
 def data(request):
@@ -179,22 +165,14 @@ def data(request):
 				auswertung['antwortenRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correct=True).count()
 				auswertung['antwortenRichtigBl'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctBl=True).count()
 				auswertung['antwortenRichtigDr'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctDr=True).count()
-				auswertung['antwortenDialekt'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='D').count()
-				auswertung['antwortenDialektRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='D', correct=True).count()
-				auswertung['antwortenDialektRichtigBl'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='D', correctBl=True).count()
-				auswertung['antwortenDialektRichtigDr'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='D', correctDr=True).count()
-				auswertung['antwortenStandard'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='S').count()
-				auswertung['antwortenStandardRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='S', correct=True).count()
-				auswertung['antwortenStandardRichtigBl'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='S', correctBl=True).count()
-				auswertung['antwortenStandardRichtigDr'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='S', correctDr=True).count()
-				auswertung['antwortenJung'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='j').count()
-				auswertung['antwortenJungRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='j', correct=True).count()
-				auswertung['antwortenJungRichtigBl'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='j', correctBl=True).count()
-				auswertung['antwortenJungRichtigDr'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='j', correctDr=True).count()
-				auswertung['antwortenAlt'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='a').count()
-				auswertung['antwortenAltRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='a', correct=True).count()
-				auswertung['antwortenAltRichtigBl'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='a', correctBl=True).count()
-				auswertung['antwortenAltRichtigDr'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='a', correctDr=True).count()
+				auswertung['antwortenDialekt'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk).count()
+				auswertung['antwortenDialektRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correct=True).count()
+				auswertung['antwortenDialektRichtigBl'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctBl=True).count()
+				auswertung['antwortenDialektRichtigDr'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctDr=True).count()
+				auswertung['antwortenStandard'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk).count()
+				auswertung['antwortenStandardRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correct=True).count()
+				auswertung['antwortenStandardRichtigBl'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctBl=True).count()
+				auswertung['antwortenStandardRichtigDr'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctDr=True).count()
 				auswertung['statistik'] = []
 				for x in [1, 2, 3, 4, 5]:
 					auswertung['statistik'].append({
@@ -246,9 +224,8 @@ def data(request):
 				aOrte = []
 				for aOrt in dbmodels.audiodatei.objects.filter(satz=uSatz).values('ort').annotate(benutzt=Sum('benutzt')).order_by('benutzt'):
 					useOrt = True
-					for uTyp in ['S', 'D']:
-						if dbmodels.audiodatei.objects.filter(satz=uSatz, ort=aOrt['ort'], typ=uTyp, alter='j').count() < 1 or dbmodels.audiodatei.objects.filter(satz=uSatz, ort=aOrt['ort'], typ=uTyp, alter='a').count() < 1:
-							useOrt = False
+					if dbmodels.audiodatei.objects.filter(satz=uSatz, ort=aOrt['ort']).count() < 1 or dbmodels.audiodatei.objects.filter(satz=uSatz, ort=aOrt['ort']).count() < 1:
+						useOrt = False
 					if useOrt:
 						aOrte.append(aOrt)
 				# ToDo: Bereits gespielte Orte unwarscheinlicher machen!
@@ -264,33 +241,31 @@ def data(request):
 					if uOrt not in uOrte or dg > 10:
 						uOrte.append(uOrt)
 				# Spieldaten
-				for uTyp in ['S', 'D']:
-					for uOrt in uOrte:
-						for aAlter in pAlter:
-							aFiles = []
-							aFilesMax = 0
-							for aFile in dbmodels.audiodatei.objects.filter(satz=uSatz, ort=uOrt, typ=uTyp, alter=aAlter['s']).order_by('benutzt')[:10]:
-								# ToDo: Durchschnittswert hinzufügen
-								aFiles.append({'pk': aFile.pk, 'file': aFile.file, 'ort': aFile.ort, 'benutzt': aFile.benutzt})
-								if aFile.benutzt > aFilesMax:
-									aFilesMax = aFile.benutzt
-							uFile = weighted_choice(aFiles, [aFilesMax - x['benutzt'] + 1 for x in aFiles])
-							if uTyp not in game:
-								game[uTyp] = []
-							game[uTyp].append(uFile)
-					shuffle(game[uTyp])
-					# Selber Ort nicht hintereinander!
-					lOrt = None
-					for aOrtIdx, aOrt in enumerate(game[uTyp]):
-						if aOrt['ort'] == lOrt:
-							if aOrtIdx < len(game[uTyp]) - 1:
-								lOrt = game[uTyp][aOrtIdx + 1]['ort']
-								game[uTyp][aOrtIdx], game[uTyp][aOrtIdx + 1] = game[uTyp][aOrtIdx + 1], game[uTyp][aOrtIdx]
-							else:
-								game[uTyp][aOrtIdx], game[uTyp][0] = game[uTyp][0], game[uTyp][aOrtIdx]
+				for uOrt in uOrte:
+					aFiles = []
+					aFilesMax = 0
+					for aFile in dbmodels.audiodatei.objects.filter(satz=uSatz, ort=uOrt).order_by('benutzt')[:10]:
+						# ToDo: Durchschnittswert hinzufügen
+						aFiles.append({'pk': aFile.pk, 'file': aFile.file, 'ort': aFile.ort, 'benutzt': aFile.benutzt})
+						if aFile.benutzt > aFilesMax:
+							aFilesMax = aFile.benutzt
+					uFile = weighted_choice(aFiles, [aFilesMax - x['benutzt'] + 1 for x in aFiles])
+					if 'D' not in game:
+						game['D'] = []
+					game['D'].append(uFile)
+				shuffle(game['D'])
+				# Selber Ort nicht hintereinander!
+				lOrt = None
+				for aOrtIdx, aOrt in enumerate(game['D']):
+					if aOrt['ort'] == lOrt:
+						if aOrtIdx < len(game['D']) - 1:
+							lOrt = game['D'][aOrtIdx + 1]['ort']
+							game['D'][aOrtIdx], game['D'][aOrtIdx + 1] = game['D'][aOrtIdx + 1], game['D'][aOrtIdx]
 						else:
-							lOrt = aOrt['ort']
-					shuffle(uOrte)
+							game['D'][aOrtIdx], game['D'][0] = game['D'][0], game['D'][aOrtIdx]
+					else:
+						lOrt = aOrt['ort']
+				shuffle(uOrte)
 				return httpOutput(json.dumps(game), mimetype='application/json; charset=utf-8')
 	return httpOutput(json.dumps({'error': 'unknown request'}), mimetype='application/json; charset=utf-8')
 
@@ -305,36 +280,18 @@ def updateaudio(request):
 	aUpdate = 0
 	output = ''
 	for file in files:
-		fileData = file[:-4].split("_")
-		if file.split(".")[-1] == "ogg" and len(fileData) == 5:
+		if file.split(".")[-1] == "ogg":
 			uOrt = False
-			(aTyp, aOrt, aAlter, aSatz, aGpKennzahl) = fileData
-			for d in pOrte:
-				if d['sf'] == aOrt:
-					uOrt = d['s']
-			if (
-				any(d['s'] == aSatz for d in pSaetze) and
-				uOrt and
-				any(d['s'] == aTyp for d in pTypen) and
-				any(d['s'] == aAlter for d in pAlter)
-			):
-				aLen += 1
-				output += str(aLen).rjust(4, ' ') + ' - ' + file + ' -> '
-				try:
-					dbmodels.audiodatei.objects.get(file=file)
-					output += 'exists\n'
-				except dbmodels.audiodatei.DoesNotExist:
-					aUpdate += 1
-					nAudiodatei = dbmodels.audiodatei()
-					nAudiodatei.file = file
-					nAudiodatei.typ = aTyp
-					nAudiodatei.ort = uOrt
-					nAudiodatei.alter = aAlter
-					nAudiodatei.satz = aSatz
-					nAudiodatei.gpKennzahl = aGpKennzahl
-					nAudiodatei.benutzt = 0
-					nAudiodatei.save()
-					output += 'added\n'
+			try:
+				dbmodels.audiodatei.objects.get(file=file)
+				output += 'exists\n'
+			except dbmodels.audiodatei.DoesNotExist:
+				aUpdate += 1
+				nAudiodatei = dbmodels.audiodatei()
+				nAudiodatei.file = file
+				nAudiodatei.benutzt = 0
+				nAudiodatei.save()
+				output += 'added\n'
 	return httpOutput('Updated ... ' + str(aUpdate) + '/' + str(aLen) + '/' + str(len(files)) + '\n' + '-----' + '\n' + output)
 
 
