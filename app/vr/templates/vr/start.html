@@ -1,0 +1,21 @@
+{% extends 'main/basis.html' %}
+{% load render_bundle from webpack_loader %}
+{% load staticfiles %}
+{% load iamDioeVrTags %}
+{% block title %} - Startseite{% endblock %}
+{% block sitecss %}
+	{% render_bundle 'app' 'css' 'VR' %}
+{% endblock %}
+{% block inhalt %}
+	<div id="app"></div>
+{% endblock %}
+{% block sitejs %}
+	<script>
+		var csrf = '{{ csrf_token }}';
+		var mediaUrl = '{{ mediaUrl }}';
+		var gData = JSON.parse('{{ gData|toJson|safe }}');
+	</script>
+	{% render_bundle 'manifest' 'js' 'VR' %}
+	{% render_bundle 'vendor' 'js' 'VR' %}
+	{% render_bundle 'app' 'js' 'VR' %}
+{% endblock %}
