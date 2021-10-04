@@ -1,4 +1,4 @@
-# IAMDIOEVR
+# REGIONENRATEN
 FROM ubuntu:14.04
 
 # INSTALL EVERYTHING (”-y” WITHOUT ASKING FOR PERMISSION)
@@ -52,7 +52,7 @@ RUN pip3 install psycopg2
 COPY . /home/docker/code/
 
 # COLLECT ALL STATIC FILES IN /STATIC
-ENV IAMDIOEVR_STATIC_ROOT=/static
+ENV REGIONENRATEN_STATIC_ROOT=/static
 RUN python3 /home/docker/code/app/manage.py collectstatic --noinput
 
 EXPOSE 80

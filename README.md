@@ -1,4 +1,4 @@
-## I am DiÖ Varietäten raten
+## Regionenraten
 
 ### 1. Start a PostgreSQL container
 like this:
@@ -6,8 +6,8 @@ like this:
 
 Use ` -p 5432:5432` to expose a port for easy access through a GUI like pgAdmin.
 
-### 2. Start the "I am DiÖ Varietäten raten" App with a container-link and an exposed port
-`docker run -p 3333:80 --env-file=.env --link my-postgres:postgres dioe/iamdioe-vr:stage`
+### 2. Start the "Regionenraten" App with a container-link and an exposed port
+`docker run -p 3333:80 --env-file=.env --link my-postgres:postgres dioe/regionenraten:stage`
 
 ### 3. Setup the App/Database
 run these commands from inside the container:
@@ -21,15 +21,15 @@ run these commands from inside the container:
 If none of these are specified, it will fall back to an internal SQLite DB.
 Put these into a `.env` file for convenient access.
 
-| Variable              | Example                                  |
-|-----------------------|------------------------------------------|
-| IAMDIOEVR_DB          | `django.db.backends.postgresql_psycopg2` |
-| IAMDIOEVR_DB_NAME     | `iamdioevrdb`                            |
-| IAMDIOEVR_DB_USER     | `user`                                   |
-| IAMDIOEVR_DB_PASSWORD | `passwort`                               |
-| IAMDIOEVR_DB_PORT     | `5432`                                   |
-| IAMDIOEVR_DB_HOST     | `postgres`                               |
-| IAMDIOEVR_STATIC_ROOT | `/static`                                |
+| Variable              | Example                                      |
+|-----------------------|----------------------------------------------|
+| REGIONENRATEN_DB          | `django.db.backends.postgresql_psycopg2` |
+| REGIONENRATEN_DB_NAME     | `regionenratendb`                        |
+| REGIONENRATEN_DB_USER     | `user`                                   |
+| REGIONENRATEN_DB_PASSWORD | `passwort`                               |
+| REGIONENRATEN_DB_PORT     | `5432`                                   |
+| REGIONENRATEN_DB_HOST     | `postgres`                               |
+| REGIONENRATEN_STATIC_ROOT | `/static`                                |
 
 
 ### Sonstiges

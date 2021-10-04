@@ -1,13 +1,13 @@
 {% extends 'main/basis.html' %}
 {% load staticfiles %}
-{% load iamDioeVrTags %}
+{% load regionenratenTags %}
 {% load crispy_forms_tags %}
 {% block title %} - Auswertung{% endblock %}
 {% block ueberschrift %} - Auswertung{% endblock %}
 {% block sitecss %}<link href="{% static "evaluation/css/style.css" %}?{% settings_value "CACH_RANDOM" %}" rel="stylesheet">{% endblock %}
 {% block inhalt %}
 <div style="overflow-x: auto">
-	<a href="{% url 'iamdioevr_logout' %}" class="float-right">Abmelden</a><h1>Auswertung</h1>
+	<a href="{% url 'regionenraten_logout' %}" class="float-right">Abmelden</a><h1>Auswertung</h1>
 	<br>
 	{% if aAuswertungen %}
 		<b>Treffer: {{ aCount }}</b> - {% if prev > -1 %}<a href="{% url 'evaluation:start' %}?seite={{ prev }}">Zurück</a>{% else %}Zurück{% endif %} - {% if next > -1 %}<a href="{% url 'evaluation:start' %}?seite={{ next }}">Weiter</a>{% else %}Weiter{% endif %} - <a href="{% url 'evaluation:start' %}?get=xls">XLS</a><br>

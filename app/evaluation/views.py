@@ -8,7 +8,7 @@ import datetime
 def start(request):
 	"""Startseite."""
 	if not request.user.is_authenticated():
-		return redirect('iamdioevr_login')
+		return redirect('regionenraten_login')regionenraten
 	aSeite = 0
 	if 'seite' in request.GET and request.GET.get('seite'):
 		aSeite = int(request.GET.get('seite'))
@@ -25,9 +25,9 @@ def start(request):
 	if getXls:
 		import xlwt
 		response = HttpResponse(content_type='text/ms-excel')
-		response['Content-Disposition'] = 'attachment; filename="iamdioevr_' + datetime.date.today().strftime('%Y%m%d') + '.xls"'
+		response['Content-Disposition'] = 'attachment; filename="regionenraten_' + datetime.date.today().strftime('%Y%m%d') + '.xls"'
 		wb = xlwt.Workbook(encoding='utf-8')
-		ws = wb.add_sheet('iamDioeVr')
+		ws = wb.add_sheet('regionenraten')
 		row_num = 0
 		columns = []
 		columns.append(('Nr', 2000))
