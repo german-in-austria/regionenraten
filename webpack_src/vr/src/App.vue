@@ -33,17 +33,17 @@
 		mounted () {
 			if (this.devMode) {
 				console.log(mediaUrl, gData)
-				this.playerUuId = '2c8dd99b-3b42-48a7-9cd6-df63f5b2122f'
+				this.playerUuId = 'a09bc507-117c-4d63-b99a-289b03d3355a'
 			}
 		},
 		methods: {
 			start () {		// Wenn noch keine playerUuId dann zum Fragebogen für Sozialdaten, sonst weiter zum Spiel ...
 				this.site = ((this.playerUuId) ? 2 : 1)
 			},
-			saveData (data, weitere) {
+			saveData (data) {
 				this.$http.post('', {
 					set: 'playerData',
-					data: JSON.stringify({'data': data, 'weitere': weitere})
+					data: JSON.stringify({'data': data})
 				})
 				.then((response) => {
 					if (response.data.playerUuId) {
@@ -145,6 +145,10 @@
 					console.log(err)
 					this.$set(target.game, 'loading', false)
 					alert('Fehler!')
+						if (this.devMode) {
+							this.playerUuId = null
+							this.site = 1
+						}
 				})
 			},
 		},

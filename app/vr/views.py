@@ -62,64 +62,17 @@ def data(request):
 			aData = json.loads(request.POST.get('data'))
 			aSpieler = dbmodels.spieler()
 			aSpieler.geburtsjahr = int(aData['data']['geburtsjahr'])
-			aSpieler.bioGesch = int(aData['data']['bioGesch'])
-			aSpieler.beruf = aData['data']['beruf'].strip()
-			if ('ort' in aData['data']['wohnort'] and aData['data']['wohnort']['ort'].strip()) or ('plz' in aData['data']['wohnort'] and aData['data']['wohnort']['plz'] and int(aData['data']['wohnort']['plz']) > 0):
-				aOrt = None
-				try:
-					aOrt = dbmodels.ort.objects.get(plz=int(aData['data']['wohnort']['plz']), ort=aData['data']['wohnort']['ort'].strip())
-				except dbmodels.ort.DoesNotExist:
-					aOrt = dbmodels.ort()
-					aOrt.plz = int(aData['data']['wohnort']['plz'])
-					aOrt.ort = aData['data']['wohnort']['ort'].strip()
-					aOrt.save()
-				aSpieler.wohnort = aOrt
-			if ('ort' in aData['data']['wohnortLeben'] and aData['data']['wohnortLeben']['ort'].strip()) or ('plz' in aData['data']['wohnortLeben'] and aData['data']['wohnortLeben']['plz'] and int(aData['data']['wohnortLeben']['plz']) > 0):
-				aOrt = None
-				try:
-					aOrt = dbmodels.ort.objects.get(plz=int(aData['data']['wohnortLeben']['plz']), ort=aData['data']['wohnortLeben']['ort'].strip())
-				except dbmodels.ort.DoesNotExist:
-					aOrt = dbmodels.ort()
-					aOrt.plz = int(aData['data']['wohnortLeben']['plz'])
-					aOrt.ort = aData['data']['wohnortLeben']['ort'].strip()
-					aOrt.save()
-				aSpieler.wohnortLeben = aOrt
-			aSpieler.sprachenDialekte = aData['data']['sprachenDialekte'].strip()
+			aSpieler.gesch = int(aData['data']['gesch'])
+			aSpieler.taetigkeit = str(aData['data']['taetigkeit']['type']) + ' - ' + aData['data']['taetigkeit']['text'].strip()
+			aSpieler.wohnort = str(aData['data']['wohnort']['ort']).strip() + ', ' + str(aData['data']['wohnort']['plz']).strip()
+			wohnortLeben = ''
+			for aOrt in aData['data']['wohnortLeben']:
+				wohnortLeben += str(aOrt['ort']).strip() + ', ' + str(aOrt['plz']).strip() + ', ' + str(aOrt['von']).strip() + ' - ' + str(aOrt['bis']).strip() + '; '
+			wohnortEltern = ''
+			for aOrt in aData['data']['wohnortEltern']:
+				wohnortEltern += str(aOrt['ort']).strip() + ', ' + str(aOrt['plz']).strip() + '; '
+			aSpieler.wohnortEltern = wohnortEltern
 			aSpieler.dsgvo = aData['data']['dsgvo']
-			if aData['weitere']:
-				aSpieler.weitere = True
-				if ('ort' in aData['data']['wohnortVater'] and aData['data']['wohnortVater']['ort'].strip()) or ('plz' in aData['data']['wohnortVater'] and aData['data']['wohnortVater']['plz'] and int(aData['data']['wohnortVater']['plz']) > 0):
-					aOrt = None
-					try:
-						aOrt = dbmodels.ort.objects.get(plz=int(aData['data']['wohnortVater']['plz']), ort=aData['data']['wohnortVater']['ort'].strip())
-					except dbmodels.ort.DoesNotExist:
-						aOrt = dbmodels.ort()
-						aOrt.plz = int(aData['data']['wohnortVater']['plz'])
-						aOrt.ort = aData['data']['wohnortVater']['ort'].strip()
-						aOrt.save()
-					aSpieler.wohnortVater = aOrt
-				if ('ort' in aData['data']['wohnortMutter'] and aData['data']['wohnortMutter']['ort'].strip()) or ('plz' in aData['data']['wohnortMutter'] and aData['data']['wohnortMutter']['plz'] and int(aData['data']['wohnortMutter']['plz']) > 0):
-					aOrt = None
-					try:
-						aOrt = dbmodels.ort.objects.get(plz=int(aData['data']['wohnortMutter']['plz']), ort=aData['data']['wohnortMutter']['ort'].strip())
-					except dbmodels.ort.DoesNotExist:
-						aOrt = dbmodels.ort()
-						aOrt.plz = int(aData['data']['wohnortMutter']['plz'])
-						aOrt.ort = aData['data']['wohnortMutter']['ort'].strip()
-						aOrt.save()
-					aSpieler.wohnortMutter = aOrt
-				aSpieler.sprachlichErzogenVater = int(aData['data']['sprachlichErzogenVater'])
-				aSpieler.sprachlichErzogenMutter = int(aData['data']['sprachlichErzogenMutter'])
-				aSpieler.dialektSelbst = True if aData['data']['dialektSelbst'] == 'Ja' else False if aData['data']['dialektSelbst'] == 'Nein' else None
-				if aSpieler.dialektSelbst:
-					aSpieler.dialektSelbstWelcher = aData['data']['dialektSelbstWelcher'].strip()
-					aSpieler.dialektSprechen = int(aData['data']['dialektSprechen'])
-					aSpieler.dialektNutzen = int(aData['data']['dialektNutzen'])
-				aSpieler.hochdeutschSprechen = int(aData['data']['hochdeutschSprechen'])
-				aSpieler.hochdeutschNutzen = int(aData['data']['hochdeutschNutzen'])
-				aSpieler.alltagSprechen = int(aData['data']['alltagSprechen'])
-				aSpieler.bezeichnungSprechweise = aData['data']['bezeichnungSprechweise'].strip()
-				aSpieler.anmerkungen = aData['data']['anmerkungen'].strip()
 			aSpieler.save()
 			return httpOutput(json.dumps({'OK': True, 'playerUuId': str(aSpieler.uuid)}), mimetype='application/json; charset=utf-8')
 		# Speichere Spielrunde
@@ -195,36 +148,11 @@ def data(request):
 				aSpiel.save()
 				game['gId'] = aSpiel.pk
 				from random import shuffle
-				# Sätze
-				# ToDo: Bereits gespielte Sätze unwarscheinlicher machen!
-				xSaetze = dbmodels.antworten.objects.filter(spiel__spieler__uuid=game['playerUuId']).values('audiodatei__satz').annotate(satz_Count=Count('audiodatei__satz')).order_by('audiodatei__satz')
-				# [{'satz_Count': 2, 'audiodatei__satz': '02'}, {'satz_Count': 1, 'audiodatei__satz': '12'}]
-				xSatzCountMax = 0
-				xSatzCountMin = 99999999
-				for xSatz in xSaetze:
-					if xSatz['satz_Count'] > xSatzCountMax:
-						xSatzCountMax = xSatz['satz_Count']
-					if xSatz['satz_Count'] < xSatzCountMin:
-						xSatzCountMin = xSatz['satz_Count']
-				iSaetze = []
-				if xSatzCountMin != 99999999 and xSatzCountMax > xSatzCountMin:
-					for xSatz in xSaetze:
-						if xSatz['satz_Count'] == xSatzCountMax:
-							iSaetze.append(xSatz['audiodatei__satz'])
-				aSaetze = []
-				for aSatz in dbmodels.audiodatei.objects.all().values('satz').annotate(benutzt=Sum('benutzt')).order_by('benutzt'):
-					if aSatz['satz'] not in iSaetze:
-						aSaetze.append(aSatz)
-				aSaetzeMax = 0
-				for aSatz in aSaetze:
-					if aSatz['benutzt'] > aSaetzeMax:
-						aSaetzeMax = aSatz['benutzt']
-				uSatz = weighted_choice([x['satz'] for x in aSaetze], [aSaetzeMax - x['benutzt'] + 1 for x in aSaetze])
 				# Orte
 				aOrte = []
-				for aOrt in dbmodels.audiodatei.objects.filter(satz=uSatz).values('ort').annotate(benutzt=Sum('benutzt')).order_by('benutzt'):
+				for aOrt in dbmodels.audiodatei.objects.values('ort').annotate(benutzt=Sum('benutzt')).order_by('benutzt'):
 					useOrt = True
-					if dbmodels.audiodatei.objects.filter(satz=uSatz, ort=aOrt['ort']).count() < 1 or dbmodels.audiodatei.objects.filter(satz=uSatz, ort=aOrt['ort']).count() < 1:
+					if dbmodels.audiodatei.objects.filter(ort=aOrt['ort']).count() < 1 or dbmodels.audiodatei.objects.filter(ort=aOrt['ort']).count() < 1:
 						useOrt = False
 					if useOrt:
 						aOrte.append(aOrt)
@@ -244,7 +172,7 @@ def data(request):
 				for uOrt in uOrte:
 					aFiles = []
 					aFilesMax = 0
-					for aFile in dbmodels.audiodatei.objects.filter(satz=uSatz, ort=uOrt).order_by('benutzt')[:10]:
+					for aFile in dbmodels.audiodatei.objects.filter(ort=uOrt).order_by('benutzt')[:10]:
 						# ToDo: Durchschnittswert hinzufügen
 						aFiles.append({'pk': aFile.pk, 'file': aFile.file, 'ort': aFile.ort, 'benutzt': aFile.benutzt})
 						if aFile.benutzt > aFilesMax:
