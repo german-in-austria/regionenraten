@@ -156,7 +156,6 @@ if 'REGIONENRATEN_STATIC_URL' in os.environ and os.environ['REGIONENRATEN_STATIC
 
 STATICFILES_DIRS = (
 	os.path.join(BASE_DIR, 'regionenraten', 'static'),
-	os.path.join(BASE_DIR, 'vr', 'static'),
 	os.path.join(BASE_DIR, 'evaluation', 'static'),
 	os.path.abspath(os.path.join(BASE_DIR, os.pardir, 'webpack_src', 'vr', 'dist')),
 )

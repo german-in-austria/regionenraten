@@ -1,10 +1,16 @@
 # REGIONENRATEN
-FROM ubuntu:14.04
+FROM ubuntu:18.04
+ENV TZ=Europe/Berlin
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# ADD SOURCES FOR BUILD DEPENDENCIES
+RUN echo "deb-src http://in.archive.ubuntu.com/ubuntu/ bionic main restricted" >> /etc/apt/sources.list
+RUN echo "deb-src http://in.archive.ubuntu.com/ubuntu/ bionic-updates main restricted" >> /etc/apt/sources.list
 
 # INSTALL EVERYTHING (”-y” WITHOUT ASKING FOR PERMISSION)
 RUN apt-get update
 RUN apt-get install -y software-properties-common
-RUN add-apt-repository ppa:fkrull/deadsnakes
+RUN add-apt-repository ppa:deadsnakes/ppa
 RUN apt-get update
 RUN apt-get install -y git
 RUN apt-get install -y python3.5
@@ -53,7 +59,7 @@ COPY . /home/docker/code/
 
 # COLLECT ALL STATIC FILES IN /STATIC
 ENV REGIONENRATEN_STATIC_ROOT=/static
-RUN python3 /home/docker/code/app/manage.py collectstatic --noinput
+RUN python3.5 /home/docker/code/app/manage.py collectstatic --noinput
 
 EXPOSE 80
 CMD ["supervisord", "-n"]
