@@ -17,11 +17,13 @@
 				<tr>
 					<th>#</th>
 					<th>Antworten Id</th>
-					<th>Antworten runde</th>
 					<th>Antworten beispiel</th>
 					<th>Antworten wiedergaben</th>
 					<th>Antworten gewOrt</th>
-					<th>Antworten sympathie</th>
+					<th>Antworten hochdeutsch</th>
+					<th>Antworten orf</th>
+					<th>Antworten pOrt</th>
+					<th>Antworten aufgefallen</th>
 					<th>Antworten zeit</th>
 					<th>Spiel Id</th>
 					<th>Spiel Zeit</th>
@@ -63,11 +65,13 @@
 				<tr>
 					<td>{{ auswertung.aNr }}</td>
 					<td>{{ auswertung.model.pk }}</td>
-					<td>{{ auswertung.model.runde }}</td>
 					<td>{{ auswertung.model.beispiel }}</td>
 					<td>{{ auswertung.model.wiedergaben }}</td>
 					<td>{{ auswertung.model.gewOrt }}</td>
-					<td>{{ auswertung.model.sympathie }}</td>
+					<td>{{ auswertung.model.hochdeutsch }}</td>
+					<td>{{ auswertung.model.orf }}</td>
+					<td>{{ auswertung.model.pOrt }}</td>
+					<td>{{ auswertung.model.aufgefallen }}</td>
 					<td>{{ auswertung.model.zeit|date:"c" }}</td>
 					<td>{{ auswertung.model.spiel.pk }}</td>
 					<td>{{ auswertung.model.spiel.zeit|date:"c" }}</td>

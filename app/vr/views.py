@@ -77,16 +77,18 @@ def data(request):
 			return httpOutput(json.dumps({'OK': True, 'playerUuId': str(aSpieler.uuid)}), mimetype='application/json; charset=utf-8')
 		# Speichere Spielrunde
 		if request.POST.get('set') == 'gameRound' and 'playerUuId' in request.POST:
-			aData = json.loads(request.POST.get('data'))  # {'selOrt': 'NEU', 'rundeNr': 0, 'played': 1, 'beispielNr': 0, 'gId': 11, 'sympathie': 3, 'aId': 12}
+			aData = json.loads(request.POST.get('data'))  # {'selOrt': 'NEU', 'played': 1, 'beispielNr': 0, 'gId': 11, 'hochdeutsch': 3, 'orf': 3, 'pOrt' : '', 'aufgefallen,: '', 'aId': 12}
 			aGame = dbmodels.spiel.objects.get(pk=aData['gId'], spieler__uuid=request.POST.get('playerUuId'))  # Überprüfen ob Spiel mit Spieler existiert
 			aAntwort = dbmodels.antworten()
 			aAntwort.spiel = aGame
 			aAntwort.audiodatei = dbmodels.audiodatei.objects.get(pk=aData['aId'])
-			aAntwort.runde = aData['rundeNr']
 			aAntwort.beispiel = aData['beispielNr']
 			aAntwort.wiedergaben = aData['played']
 			aAntwort.gewOrt = aData['selOrt']
-			aAntwort.sympathie = aData['sympathie']
+			aAntwort.hochdeutsch = aData['hochdeutsch']
+			aAntwort.orf = aData['orf']
+			aAntwort.pOrt = aData['pOrt']
+			aAntwort.aufgefallen = aData['aufgefallen']
 			sollOrt = None
 			selOrt = None
 			for d in pOrte:

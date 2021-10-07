@@ -3,9 +3,7 @@
 		<div class="card" v-if="gameData.game && !gameData.game.loading && gameData.game.ready && gameData.game.data">
 			<div class="card-header text-white bg-primary text-center">
 				<div class="d-flex mb-2">
-					<div>Runde {{ rundeNr + 1 }}</div>
 					<div class="mx-auto">Sprachbeispiel {{ beispielNr + 1 }}</div>
-					<div class="hidden">Runde {{ rundeNr + 1 }}</div>
 				</div>
 				<button  type="button" class="btn btn-sm btn-light" disabled v-if="!loaded">Lade Audio ...</button>
 				<button @click="abspielen()" type="button" class="btn btn-sm btn-light" :disabled="playing" v-else-if="played < 2">{{ ((playing) ? 'Wiedergabe ...' : ((played === 0) ? 'Abspielen' : 'Noch ein letztes mal hören?')) }}</button>
@@ -39,10 +37,19 @@
 				</div>
 			</div>
 			<div class="card-body">
-				<RadioFromTo v-model="sympathie" label="Das Gehörte wirkt auf mich:" from="sympathisch" to="unsympathisch" :disabled="played === 0"/>
+				<div class="form-group p-relative">
+					<label for="inputpOrt">Können Sie noch eine präzisere Angabe zur Herkunft der sprechenden Person innerhalb des Bundeslands geben?</label>
+					<input v-model="pOrt" type="text" class="form-control" id="inputpOrt" :disabled="played === 0">
+				</div>
+				<RadioFromTo v-model="hochdeutsch" label="Das Gehörte halte ich für reines Hochdeutsch:" from="stimme gar nicht zu" to="stimme völlig zu" :disabled="played === 0"/>
+				<RadioFromTo v-model="orf" label="Diese Person wäre als ORF-Nachrichtensprecher*in bestens geeignet:" from="stimme gar nicht zu" to="stimme völlig zu" :disabled="played === 0"/>
+				<div class="form-group p-relative">
+					<label for="inputAufgefallen">Ist Ihnen sonst noch etwas an diesem Sprachbeispiel aufgefallen?</label>
+					<input v-model="aufgefallen" type="text" class="form-control" id="inputAufgefallen" :disabled="played === 0">
+				</div>
 			</div>
 			<div class="card-footer text-white bg-primary text-right">
-				<button @click="weiter()" type="button" class="btn btn-sm btn-light" :disabled="played === 0 || sympathie === 0 || !selOrt">Weiter</button>
+				<button @click="weiter()" type="button" class="btn btn-sm btn-light" :disabled="played === 0 || hochdeutsch === 0 || orf === 0 || !selOrt">Weiter</button>
 			</div>
 		</div>
 		<div class="loading" v-if="loading">Lade ...</div>
@@ -61,9 +68,11 @@
 			return {
 				devMode: (process.env.NODE_ENV === 'development'),
 				beispielNr: 0,
-				rundeNr: 0,
 				played: 0,
-				sympathie: 0,
+				pOrt: '',
+				aufgefallen: '',
+				orf: 0,
+				hochdeutsch: 0,
 				selOrt: null,
 				gData: gData,
 				gameData: {},
@@ -89,16 +98,15 @@
 				if (!nVal) {
 					this.$set(this.saveData, 'data', {})
 					this.beispielNr += 1
-					if (this.beispielNr > 5) {
+					if (this.beispielNr > this.gameData.game.data['files'].length - 1) {
 						this.beispielNr = 0
-						this.rundeNr += 1
-						if (this.rundeNr > 1) {
-							this.rundeNr = 0
-							this.$emit('gameEnd')
-						}
+						this.$emit('gameEnd')
 					}
 					this.played = 0
-					this.sympathie = 0
+					this.pOrt = ''
+					this.aufgefallen = ''
+					this.orf = 0
+					this.hochdeutsch = 0
 					this.selOrt = null
 					this.playing = false
 					this.audioReload = true
@@ -110,9 +118,11 @@
 			weiter () {
 				let sData = {
 					'beispielNr': this.beispielNr,
-					'rundeNr': this.rundeNr,
 					'selOrt': this.selOrt,
-					'sympathie': this.sympathie,
+					'orf': this.orf,
+					'pOrt': this.pOrt,
+					'aufgefallen': this.aufgefallen,
+					'hochdeutsch': this.hochdeutsch,
 					'played': this.played,
 					'gId': this.gameData.game.data.gId,
 					'aId': this.gameData.game.data['files'][this.beispielNr].pk,
@@ -148,11 +158,11 @@
 		mounted () {
 			this.$emit('getGameData', this.gameData)
 			if (this.devMode) {
-				// this.rundeNr = 1
-				// this.beispielNr = 5
+				// this.beispielNr = 11
 				// this.played = 1
 				// this.selOrt = 'HÜT'
-				// this.sympathie = 3
+				// this.orf = 3
+				// this.hochdeutsch = 3
 			}
 			this.audio = this.$refs.audioplayer
 			this.audio.addEventListener('loadeddata', this.audioLoaded)

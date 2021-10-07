@@ -4,7 +4,7 @@
 		<br>
 		<p>ToDo: Einführungstext ...</p>
 		<br>
-		<!-- <button @click="$emit('start')" type="button" class="btn btn-primary">Starten ...</button> -->
+		<button @click="$emit('start')" type="button" class="btn btn-primary">Starten ...</button>
 	</div>
 </template>
 

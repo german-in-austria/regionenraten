@@ -21,13 +21,15 @@ class audiodatei(models.Model):
 
 class antworten(models.Model):
 	spiel				= models.ForeignKey('spiel'			, on_delete=models.CASCADE							, verbose_name="Spiel")
-	runde				= models.IntegerField(				  blank=True, null=True										, verbose_name="Runde")
 	beispiel		= models.IntegerField(				  blank=True, null=True										, verbose_name="Beispiel")
 	zeit				= models.DateTimeField(auto_now_add=True																, verbose_name="Zeit")
 	audiodatei	= models.ForeignKey('audiodatei'	, on_delete=models.CASCADE						, verbose_name="Audiodatei")
 	wiedergaben	= models.IntegerField(				  blank=True, null=True										, verbose_name="Wiedergaben")
 	gewOrt			= models.CharField(max_length=255	, blank=True, null=True								, verbose_name="gewählter Ort")
-	sympathie		= models.IntegerField(				  blank=True, null=True										, verbose_name="Sympathie (0-6)")
+	hochdeutsch = models.IntegerField(				  blank=True, null=True										, verbose_name="Hochdeutsch (1-7)")
+	orf					= models.IntegerField(				  blank=True, null=True										, verbose_name="ORF (1-7)")
+	pOrt				= models.CharField(max_length=1024	, blank=True, null=True							, verbose_name="präzisere Herkunft")
+	aufgefallen	= models.CharField(max_length=1024	, blank=True, null=True							, verbose_name="aufgefallen")
 	correct			= models.BooleanField(default=False																			, verbose_name="Richtige Antwort")
 	correctBl		= models.BooleanField(default=False																			, verbose_name="Richtiges Bundesland")
 	correctDr		= models.BooleanField(default=False																			, verbose_name="Richtiger Dialektraum")
@@ -54,12 +56,12 @@ class antworten(models.Model):
 		super(antworten, self).save(*args, **kwargs)
 
 	def __str__(self):
-		return '{}, {} [{}] [{}] [{}] {} ({}) - {}'.format(self.runde, self.beispiel, 'X' if self.correct else ' ', 'X' if self.correctBl else ' ', 'X' if self.correctDr else ' ', self.sympathie, self.zeit, self.audiodatei)
+		return '{} [{}] [{}] [{}] {} {} ({}) - {}'.format(self.beispiel, 'X' if self.correct else ' ', 'X' if self.correctBl else ' ', 'X' if self.correctDr else ' ', self.hochdeutsch, self.orf, self.zeit, self.audiodatei)
 
 	class Meta:
 		verbose_name = "Antwort"
 		verbose_name_plural = "Antworten"
-		ordering = ('zeit', 'runde', 'beispiel', )
+		ordering = ('zeit', 'beispiel', )
 
 
 class spiel(models.Model):
