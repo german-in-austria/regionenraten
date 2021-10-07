@@ -148,52 +148,11 @@ def data(request):
 				aSpiel.save()
 				game['gId'] = aSpiel.pk
 				from random import shuffle
-				# Orte
-				aOrte = []
-				for aOrt in dbmodels.audiodatei.objects.values('ort').annotate(benutzt=Sum('benutzt')).order_by('benutzt'):
-					useOrt = True
-					if dbmodels.audiodatei.objects.filter(ort=aOrt['ort']).count() < 1 or dbmodels.audiodatei.objects.filter(ort=aOrt['ort']).count() < 1:
-						useOrt = False
-					if useOrt:
-						aOrte.append(aOrt)
-				# ToDo: Bereits gespielte Orte unwarscheinlicher machen!
-				aOrteMax = 0
-				for aOrt in aOrte:
-					if aOrt['benutzt'] > aOrteMax:
-						aOrteMax = aOrt['benutzt']
-				uOrte = []
-				dg = 0
-				while len(uOrte) < 3:
-					dg += 1
-					uOrt = weighted_choice([x['ort'] for x in aOrte], [aOrteMax - x['benutzt'] + 1 for x in aOrte])
-					if uOrt not in uOrte or dg > 10:
-						uOrte.append(uOrt)
-				# Spieldaten
-				for uOrt in uOrte:
-					aFiles = []
-					aFilesMax = 0
-					for aFile in dbmodels.audiodatei.objects.filter(ort=uOrt).order_by('benutzt')[:10]:
-						# ToDo: Durchschnittswert hinzufügen
-						aFiles.append({'pk': aFile.pk, 'file': aFile.file, 'ort': aFile.ort, 'benutzt': aFile.benutzt})
-						if aFile.benutzt > aFilesMax:
-							aFilesMax = aFile.benutzt
-					uFile = weighted_choice(aFiles, [aFilesMax - x['benutzt'] + 1 for x in aFiles])
-					if 'D' not in game:
-						game['D'] = []
-					game['D'].append(uFile)
-				shuffle(game['D'])
-				# Selber Ort nicht hintereinander!
-				lOrt = None
-				for aOrtIdx, aOrt in enumerate(game['D']):
-					if aOrt['ort'] == lOrt:
-						if aOrtIdx < len(game['D']) - 1:
-							lOrt = game['D'][aOrtIdx + 1]['ort']
-							game['D'][aOrtIdx], game['D'][aOrtIdx + 1] = game['D'][aOrtIdx + 1], game['D'][aOrtIdx]
-						else:
-							game['D'][aOrtIdx], game['D'][0] = game['D'][0], game['D'][aOrtIdx]
-					else:
-						lOrt = aOrt['ort']
-				shuffle(uOrte)
+				aFiles = []
+				for aFile in dbmodels.audiodatei.objects.all():
+					aFiles.append({'pk': aFile.pk, 'file': aFile.file, 'ort': aFile.ort, 'benutzt': aFile.benutzt})
+				game['files'] = aFiles
+				shuffle(game['files'])
 				return httpOutput(json.dumps(game), mimetype='application/json; charset=utf-8')
 	return httpOutput(json.dumps({'error': 'unknown request'}), mimetype='application/json; charset=utf-8')
 
@@ -228,17 +187,3 @@ def httpOutput(aoutput, mimetype='text/plain; charset=utf-8'):
 	txtausgabe = HttpResponse(aoutput)
 	txtausgabe['Content-Type'] = mimetype
 	return txtausgabe
-
-
-def weighted_choice(values, weights):
-	"""Gewichteter Zufall."""
-	from random import random
-	from bisect import bisect
-	total = 0
-	cum_weights = []
-	for w in weights:
-		total += w
-		cum_weights.append(total)
-	x = random() * 0.9999 * total
-	i = bisect(cum_weights, x)
-	return values[i]

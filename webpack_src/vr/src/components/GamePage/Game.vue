@@ -9,7 +9,7 @@
 				</div>
 				<button  type="button" class="btn btn-sm btn-light" disabled v-if="!loaded">Lade Audio ...</button>
 				<button @click="abspielen()" type="button" class="btn btn-sm btn-light" :disabled="playing" v-else-if="played < 2">{{ ((playing) ? 'Wiedergabe ...' : ((played === 0) ? 'Abspielen' : 'Noch ein letztes mal hören?')) }}</button>
-				<button @click="" type="button" class="btn btn-sm btn-light" disabled v-else>Kann nur zwei mal angehört werden</button>
+				<button type="button" class="btn btn-sm btn-light" disabled v-else>Kann nur zwei mal angehört werden</button>
 			</div>
 			<div class="card-body" style="background: #eee;">
 				<svg viewBox="140 100 2800 1480">
@@ -27,7 +27,7 @@
 						<path d="m489.8 908.2c-10.6 0.4 2.2 17.4 6.2 8 4.1-5.4-0.6-8.9-6.2-8z"/>
 					</g>
 					<g id="svg-layer-marker">
-						<g @click="selectOrt(aOrt.s)" :transform="'translate(' + aOrt.cx + ' ' + aOrt.cy + ')'" :class="((selOrt === aOrt.s) ? ' selected' : '')" v-for="aOrt in gData.orte">
+						<g @click="selectOrt(aOrt.s)" :transform="'translate(' + aOrt.cx + ' ' + aOrt.cy + ')'" :class="((selOrt === aOrt.s) ? ' selected' : '')" v-for="(aOrt, aKey) in gData.orte" :key="aKey">
 							<circle :r="((selOrt === aOrt.s) ? 26 : 18)" cx="0" cy="0"/>
 							<text x="0" :y="((aOrt.top) ? -28 : 65)" text-anchor="middle" style="font-size: 50px; stroke:#fff; stroke-width:4">{{ aOrt.t }}</text>
 							<text x="0" :y="((aOrt.top) ? -28 : 65)" text-anchor="middle" style="font-size: 50px">{{ aOrt.t }}</text>
@@ -35,7 +35,7 @@
 					</g>
 				</svg>
 				<div class="d-block d-md-none">
-					<div @click="selectOrt(aOrt.s)" :class="'ort-btn' + ((selOrt === aOrt.s) ? ' selected' : '')" v-for="aOrt in gData.orte">{{ aOrt.t }}</div>
+					<div @click="selectOrt(aOrt.s)" :class="'ort-btn' + ((selOrt === aOrt.s) ? ' selected' : '')" v-for="(aOrt, aKey) in gData.orte" :key="aKey">{{ aOrt.t }}</div>
 				</div>
 			</div>
 			<div class="card-body">
@@ -47,7 +47,7 @@
 		</div>
 		<div class="loading" v-if="loading">Lade ...</div>
 		<div class="loading" v-if="saveData.saving">Speichere ...</div>
-		<audio ref="audioplayer"><source :src="mediaUrl + gameData.game.data[['S', 'D'][rundeNr]][beispielNr].file" type="audio/ogg" v-if="gameData.game && !gameData.game.loading && gameData.game.ready && gameData.game.data"></audio>
+		<audio ref="audioplayer"><source :src="mediaUrl + gameData.game.data['files'][beispielNr].file" type="audio/ogg" v-if="gameData.game && !gameData.game.loading && gameData.game.ready && gameData.game.data"></audio>
 	</div>
 </template>
 
@@ -115,7 +115,7 @@
 					'sympathie': this.sympathie,
 					'played': this.played,
 					'gId': this.gameData.game.data.gId,
-					'aId': this.gameData.game.data[['S', 'D'][this.rundeNr]][this.beispielNr].pk,
+					'aId': this.gameData.game.data['files'][this.beispielNr].pk,
 				}
 				this.$set(this.saveData, 'data', sData)
 				this.$emit('saveGameRound', this.saveData)
@@ -148,11 +148,11 @@
 		mounted () {
 			this.$emit('getGameData', this.gameData)
 			if (this.devMode) {
-				this.rundeNr = 1
-				this.beispielNr = 5
-				this.played = 1
-				this.selOrt = 'HÜT'
-				this.sympathie = 3
+				// this.rundeNr = 1
+				// this.beispielNr = 5
+				// this.played = 1
+				// this.selOrt = 'HÜT'
+				// this.sympathie = 3
 			}
 			this.audio = this.$refs.audioplayer
 			this.audio.addEventListener('loadeddata', this.audioLoaded)
