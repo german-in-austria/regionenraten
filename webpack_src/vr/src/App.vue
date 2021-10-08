@@ -33,7 +33,7 @@
 		mounted () {
 			if (this.devMode) {
 				console.log(mediaUrl, gData)
-				this.playerUuId = 'a09bc507-117c-4d63-b99a-289b03d3355a'
+				// this.playerUuId = 'a09bc507-117c-4d63-b99a-289b03d3355a'
 			}
 		},
 		methods: {

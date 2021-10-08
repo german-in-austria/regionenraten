@@ -3,7 +3,7 @@
 		<div class="card" v-if="gameData.game && !gameData.game.loading && gameData.game.ready && gameData.game.data">
 			<div class="card-header text-white bg-primary text-center">
 				<div class="d-flex mb-2">
-					<div class="mx-auto">Sprachbeispiel {{ beispielNr + 1 }}</div>
+					<div class="mx-auto">Sprachbeispiel {{ beispielNr + 1 }} / {{ gameData.game.data['files'].length }}</div>
 				</div>
 				<button  type="button" class="btn btn-sm btn-light" disabled v-if="!loaded">Lade Audio ...</button>
 				<button @click="abspielen()" type="button" class="btn btn-sm btn-light" :disabled="playing" v-else-if="played < 2">{{ ((playing) ? 'Wiedergabe ...' : ((played === 0) ? 'Abspielen' : 'Noch ein letztes mal hören?')) }}</button>
@@ -156,13 +156,13 @@
 		},
 		mounted () {
 			this.$emit('getGameData', this.gameData)
-			if (this.devMode) {
-				// this.beispielNr = 11
-				// this.played = 1
-				// this.selOrt = 'HÜT'
-				// this.orf = 3
-				// this.hochdeutsch = 3
-			}
+			// if (this.devMode) {
+			// 	this.beispielNr = 11
+			// 	this.played = 1
+			// 	this.selOrt = 'Niederösterreich'
+			// 	this.orf = 3
+			// 	this.hochdeutsch = 3
+			// }
 			this.audio = this.$refs.audioplayer
 			this.audio.addEventListener('loadeddata', this.audioLoaded)
 			this.audio.addEventListener('pause', this.audioPlayPause)

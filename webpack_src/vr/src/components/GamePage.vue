@@ -2,7 +2,7 @@
 
 	<Info @next="site = 'game'" v-if="site === 'info'"/>
 
-	<Game @getGameData="getGameData" @saveGameRound="saveGameRound" @gameEnd="site = 'gameEnd'" v-else-if="site === 'game'"/>
+	<Game @getGameData="getGameData" @saveGameRound="saveGameRound" @gameEnd="site = 'spracheinstellung'" v-else-if="site === 'game'"/>
 
 	<div class="text-center" v-else-if="site === 'gameEnd'">
 		<h1>Durchgang beendet</h1>

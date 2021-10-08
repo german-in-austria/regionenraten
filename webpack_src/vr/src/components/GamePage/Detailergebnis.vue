@@ -5,35 +5,20 @@
 		<div v-if="auswertungsData.auswertung && auswertungsData.auswertung.ready && auswertungsData.auswertung.data">
 			<p>Sie haben <b>{{ auswertungsData.auswertung.data.antwortenRichtigDr }}</b> von <b>{{ auswertungsData.auswertung.data.antworten }}</b> Sprecherinnen und Sprechern richtig ihren <b>Dialektregionen</b> zugeordnet.<br>
 			Sie haben <b>{{ auswertungsData.auswertung.data.antwortenRichtigBl }}</b> von <b>{{ auswertungsData.auswertung.data.antworten }}</b> Sprecherinnen und Sprechern richtig ihren <b>Bundesländern</b> zugeordnet.<br>
-			Sie haben <b>{{ auswertungsData.auswertung.data.antwortenRichtig }}</b> von <b>{{ auswertungsData.auswertung.data.antworten }}</b> Sprecherinnen und Sprechern richtig ihren <b>Heimatorten</b> zugeordnet.</p>
 			<p>Im Vergleich mit anderen Spielenden liegen sie damit hier:</p>
 			<div>
 				<svg viewBox="-5 -5 410 210" class="border">
-					<line x1="0" x2="400" :y1="(y - 1) * 18 + 0.5" :y2="(y - 1) * 18 + 0.5" style="stroke: #eee; stroke-width: 0.5;" v-for="y in 11"/>
-					<g :transform="'translate(' + (40 + x * 80) + ' 180)'" v-for="(y, x) in auswertungsData.auswertung.data.statistik">
-						<rect x="-20" width="10" :y="0.5 + -180 / statistikMax.Dr * y.Dr" :height="180 / statistikMax.Dr * y.Dr" :class="'chart chartdr' + ((auswertungsData.auswertung.data.richtigeKlasseDr === x + 1) ? ' active' : '')"/>
-						<rect x="-5" width="10" :y="0.5 + -180 / statistikMax.Bl * y.Bl" :height="180 / statistikMax.Bl * y.Bl" :class="'chart chartbl' + ((auswertungsData.auswertung.data.richtigeKlasseBl === x + 1) ? ' active' : '')"/>
-						<rect x="10" width="10" :y="0.5 + -180 / statistikMax.Ho * y.Ho" :height="180 / statistikMax.Ho * y.Ho" :class="'chart chartho' + ((auswertungsData.auswertung.data.richtigeKlasse === x + 1) ? ' active' : '')"/>
+					<line x1="0" x2="400" :y1="(y - 1) * 18 + 0.5" :y2="(y - 1) * 18 + 0.5" style="stroke: #eee; stroke-width: 0.5;" v-for="y in 11" :key="y"/>
+					<g :transform="'translate(' + (40 + x * 80) + ' 180)'" v-for="(y, x) in auswertungsData.auswertung.data.statistik" :key="x + 'x' + y">
+						<rect x="2" width="10" :y="0.5 + -180 / statistikMax.Bl * y.Bl" :height="180 / statistikMax.Bl * y.Bl" :class="'chart chartbl' + ((auswertungsData.auswertung.data.richtigeKlasseBl === x + 1) ? ' active' : '')"/>
+						<rect x="-13" width="10" :y="0.5 + -180 / statistikMax.Dr * y.Dr" :height="180 / statistikMax.Dr * y.Dr" :class="'chart chartdr' + ((auswertungsData.auswertung.data.richtigeKlasseDr === x + 1) ? ' active' : '')"/>
 						<text x="0" y="15" text-anchor="middle" style="font-size: 8px">{{ ['0%-20% richtig', '20%-40% richtig', '40%-60% richtig', '60%-80% richtig', '80%-100% richtig'][x] }}</text>
 					</g>
 				</svg>
 			</div>
 			<br>
-			<p><span class="colbox colboxdr">&nbsp;</span> = Dialektregion, <span class="colbox colboxbl">&nbsp;</span> = Bundesland, <span class="colbox colboxho">&nbsp;</span> = Heimatort<br></p>
+			<p><span class="colbox colboxdr">&nbsp;</span> = Dialektregion, <span class="colbox colboxbl">&nbsp;</span> = Bundesland<br></p>
 			<br>
-			<p><b>"Hochdeutsch" vs Dialekt</b></p>
-			<p v-if="auswertungsData.auswertung.data.antwortenDialektRichtig === auswertungsData.auswertung.data.antwortenStandardRichtig">Egal ob "Hochdeutsch" oder Dialekt, Sie erkennen die Sprecherinnen und Sprecher gleich gut.</p>
-			<p v-else>Ihnen fällt es leichter die Sprecherinnen und Sprecher richtig zu zuordnen,<br>
-				wenn diese <b>{{ ((auswertungsData.auswertung.data.antwortenDialektRichtig > auswertungsData.auswertung.data.antwortenStandardRichtig) ? 'Dialekt' : '"Hochdeutsch"') }}</b> sprechen.</p>
-			<p>(<b>Dialektregion: </b><b>{{ auswertungsData.auswertung.data.antwortenStandardRichtigDr }}</b> "Hochdeutsch" richtig zugeordnet | <b>{{ auswertungsData.auswertung.data.antwortenDialektRichtigDr }}</b> Dialekt richtig zugeornet)<br>
-				(<b>Bundesland: </b><b>{{ auswertungsData.auswertung.data.antwortenStandardRichtigBl }}</b> "Hochdeutsch" richtig zugeordnet | <b>{{ auswertungsData.auswertung.data.antwortenDialektRichtigBl }}</b> Dialekt richtig zugeornet)<br>
-				(<b>Heimatort: </b><b>{{ auswertungsData.auswertung.data.antwortenStandardRichtig }}</b> "Hochdeutsch" richtig zugeordnet | <b>{{ auswertungsData.auswertung.data.antwortenDialektRichtig }}</b> Dialekt richtig zugeornet)</p>
-			<p><b>Jung vs Alt</b></p>
-			<p v-if="auswertungsData.auswertung.data.antwortenJungRichtig === auswertungsData.auswertung.data.antwortenAltRichtig">Egal ob jung oder alt, Sie erkennen die Sprecherinnen und Sprecher gleich gut.</p>
-			<p v-else>Es fällt Ihnen leichter <b>{{ ((auswertungsData.auswertung.data.antwortenJungRichtig > auswertungsData.auswertung.data.antwortenAltRichtig) ? 'junge' : 'alte') }}</b> Sprecherinnen und Sprecher richtig zu zuordnen.</p>
-			<p>(<b>Dialektregion: </b><b>{{ auswertungsData.auswertung.data.antwortenJungRichtigDr }}</b> junge Menschen richtig zugeordnet | <b>{{ auswertungsData.auswertung.data.antwortenAltRichtigDr }}</b> alte Menschen richtig zugeordnet)<br>
-			(<b>Bundesland: </b><b>{{ auswertungsData.auswertung.data.antwortenJungRichtigBl }}</b> junge Menschen richtig zugeordnet | <b>{{ auswertungsData.auswertung.data.antwortenAltRichtigBl }}</b> alte Menschen richtig zugeordnet)<br>
-			(<b>Heimatort: </b><b>{{ auswertungsData.auswertung.data.antwortenJungRichtig }}</b> junge Menschen richtig zugeordnet | <b>{{ auswertungsData.auswertung.data.antwortenAltRichtig }}</b> alte Menschen richtig zugeordnet)</p>
 			<p><b>Danke, dass Sie mitgespielt haben!</b></p>
 		</div>
 		<br>
@@ -108,12 +93,9 @@
 		font-size: 60px;
 	}
 	rect.chartdr {
-		fill: #ffc107;
-	}
-	rect.chartbl {
 		fill: #007bff;
 	}
-	rect.chartho {
+	rect.chartbl {
 		fill: #28a745;
 	}
 	rect.chart.active {
@@ -125,12 +107,9 @@
 		width: 26px;
 	}
 	.colboxdr {
-		background: #ffc107;
-	}
-	.colboxbl {
 		background: #007bff;
 	}
-	.colboxho {
+	.colboxbl {
 		background: #28a745;
 	}
 </style>

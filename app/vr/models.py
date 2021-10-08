@@ -25,12 +25,11 @@ class antworten(models.Model):
 	zeit				= models.DateTimeField(auto_now_add=True																, verbose_name="Zeit")
 	audiodatei	= models.ForeignKey('audiodatei'	, on_delete=models.CASCADE						, verbose_name="Audiodatei")
 	wiedergaben	= models.IntegerField(				  blank=True, null=True										, verbose_name="Wiedergaben")
-	gewOrt			= models.CharField(max_length=255	, blank=True, null=True								, verbose_name="gewählter Ort")
+	gewOrt			= models.CharField(max_length=1024	, blank=True, null=True								, verbose_name="gewählter Ort")
 	hochdeutsch = models.IntegerField(				  blank=True, null=True										, verbose_name="Hochdeutsch (1-7)")
 	orf					= models.IntegerField(				  blank=True, null=True										, verbose_name="ORF (1-7)")
 	pOrt				= models.CharField(max_length=1024	, blank=True, null=True							, verbose_name="präzisere Herkunft")
 	aufgefallen	= models.CharField(max_length=1024	, blank=True, null=True							, verbose_name="aufgefallen")
-	correct			= models.BooleanField(default=False																			, verbose_name="Richtige Antwort")
 	correctBl		= models.BooleanField(default=False																			, verbose_name="Richtiges Bundesland")
 	correctDr		= models.BooleanField(default=False																			, verbose_name="Richtiger Dialektraum")
 
@@ -38,10 +37,6 @@ class antworten(models.Model):
 		try:
 			aSpieler = self.spiel.spieler
 			aAntw = antworten.objects.filter(spiel__spieler_id=aSpieler.pk).count()
-			aRichtigeKlasse = None
-			if aAntw > 0:
-				aRichtigeKlasse = math.floor(4.99 / aAntw * antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correct=True).count()) + 1
-			aSpieler.richtigeKlasse = aRichtigeKlasse
 			aRichtigeKlasseBl = None
 			if aAntw > 0:
 				aRichtigeKlasseBl = math.floor(4.99 / aAntw * antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctBl=True).count()) + 1
@@ -56,7 +51,7 @@ class antworten(models.Model):
 		super(antworten, self).save(*args, **kwargs)
 
 	def __str__(self):
-		return '{} [{}] [{}] [{}] {} {} ({}) - {}'.format(self.beispiel, 'X' if self.correct else ' ', 'X' if self.correctBl else ' ', 'X' if self.correctDr else ' ', self.hochdeutsch, self.orf, self.zeit, self.audiodatei)
+		return '{} [{}] [{}] {} {} ({}) - {}'.format(self.beispiel, 'X' if self.correctBl else ' ', 'X' if self.correctDr else ' ', self.hochdeutsch, self.orf, self.zeit, self.audiodatei)
 
 	class Meta:
 		verbose_name = "Antwort"
@@ -83,13 +78,15 @@ class spieler(models.Model):
 	# Fragebogen mit Orten usw.
 	geburtsjahr		= models.IntegerField(				  blank=True, null=True									, verbose_name="Geburtsjahr")
 	gesch		= models.IntegerField(				  blank=True, null=True												, verbose_name="Geschlecht")
-	taetigkeit = models.CharField(max_length=255	, blank=True, null=True								, verbose_name="Tätigkeit")
-	wohnort			= models.CharField(max_length=255	, blank=True, null=True								, verbose_name="Wohnort")
-	wohnortLeben	= models.CharField(max_length=255	, blank=True, null=True							, verbose_name="Wohnort Leben")
-	wohnortEltern	= models.CharField(max_length=255	, blank=True, null=True							, verbose_name="Wohnort Eltern")
+	taetigkeit = models.CharField(max_length=1024	, blank=True, null=True								, verbose_name="Tätigkeit")
+	wohnort			= models.CharField(max_length=1024	, blank=True, null=True								, verbose_name="Wohnort")
+	wohnortLeben	= models.CharField(max_length=1024	, blank=True, null=True							, verbose_name="Wohnort Leben")
+	wohnortEltern	= models.CharField(max_length=1024	, blank=True, null=True							, verbose_name="Wohnort Eltern")
 	dsgvo			= models.BooleanField(default=False																				, verbose_name="DSGVO")
+	# Nach dem Spiel
+	erkannt	= models.CharField(max_length=1024	, blank=True, null=True							, verbose_name="Erkannt")
+	anmerkungen	= models.CharField(max_length=1024	, blank=True, null=True							, verbose_name="Anmerkungen")
 	# Cach
-	richtigeKlasse	= models.IntegerField(				  blank=True, null=True								, verbose_name="Richtig (1 = 0%-20%, 2 = 20%-40%, ...)")
 	richtigeKlasseBl = models.IntegerField(				  blank=True, null=True								, verbose_name="Richtig Bundesland (1 = 0%-20%, 2 = 20%-40%, ...)")
 	richtigeKlasseDr = models.IntegerField(				  blank=True, null=True								, verbose_name="Richtig Dialektregion (1 = 0%-20%, 2 = 20%-40%, ...)")
 

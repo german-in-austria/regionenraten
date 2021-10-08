@@ -50,11 +50,8 @@ def data(request):
 		if request.POST.get('set') == 'playerDataSe':
 			aData = json.loads(request.POST.get('data'))
 			aSpieler = dbmodels.spieler.objects.get(uuid=request.POST.get('playerUuId'))  # Überprüfen ob Spiel mit Spieler existiert
-			aSpieler.dialektSympathisch = aData['data']['dialektSympathisch'].strip()
-			aSpieler.dialektSympathischWarum = aData['data']['dialektSympathischWarum'].strip()
-			aSpieler.dialektUnsympathisch = aData['data']['dialektUnsympathisch'].strip()
-			aSpieler.dialektUnsympathischWarum = aData['data']['dialektUnsympathischWarum'].strip()
-			aSpieler.gehoerteDialekte = aData['data']['gehoerteDialekte'].strip()
+			aSpieler.erkannt = aData['data']['erkannt'].strip()
+			aSpieler.anmerkungen = aData['data']['anmerkungen'].strip()
 			aSpieler.save()
 			return httpOutput(json.dumps({'OK': True, 'playerUuId': str(aSpieler.uuid)}), mimetype='application/json; charset=utf-8')
 		# Speichere Spielerdaten
@@ -68,6 +65,7 @@ def data(request):
 			wohnortLeben = ''
 			for aOrt in aData['data']['wohnortLeben']:
 				wohnortLeben += str(aOrt['ort']).strip() + ', ' + str(aOrt['plz']).strip() + ', ' + str(aOrt['von']).strip() + ' - ' + str(aOrt['bis']).strip() + '; '
+			aSpieler.wohnortLeben = wohnortLeben
 			wohnortEltern = ''
 			for aOrt in aData['data']['wohnortEltern']:
 				wohnortEltern += str(aOrt['ort']).strip() + ', ' + str(aOrt['plz']).strip() + '; '
@@ -92,13 +90,11 @@ def data(request):
 			sollOrt = None
 			selOrt = None
 			for d in pOrte:
-				if d['s'] == aAntwort.audiodatei.ort:
+				if d['bl'] == aAntwort.audiodatei.ort:
 					sollOrt = d
 			for d in pOrte:
-				if d['s'] == aAntwort.gewOrt:
+				if d['bl'] == aAntwort.gewOrt:
 					selOrt = d
-			if aAntwort.audiodatei.ort == aAntwort.gewOrt:
-				aAntwort.correct = True
 			if sollOrt and selOrt:
 				if selOrt['bl'] == sollOrt['bl']:
 					aAntwort.correctBl = True
@@ -117,25 +113,20 @@ def data(request):
 			if auswertung['playerUuId']:
 				aSpieler = dbmodels.spieler.objects.get(uuid=auswertung['playerUuId'])  # Überprüfen ob UuId existiert
 				auswertung['antworten'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk).count()
-				auswertung['antwortenRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correct=True).count()
 				auswertung['antwortenRichtigBl'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctBl=True).count()
 				auswertung['antwortenRichtigDr'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctDr=True).count()
 				auswertung['antwortenDialekt'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk).count()
-				auswertung['antwortenDialektRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correct=True).count()
 				auswertung['antwortenDialektRichtigBl'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctBl=True).count()
 				auswertung['antwortenDialektRichtigDr'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctDr=True).count()
 				auswertung['antwortenStandard'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk).count()
-				auswertung['antwortenStandardRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correct=True).count()
 				auswertung['antwortenStandardRichtigBl'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctBl=True).count()
 				auswertung['antwortenStandardRichtigDr'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctDr=True).count()
 				auswertung['statistik'] = []
 				for x in [1, 2, 3, 4, 5]:
 					auswertung['statistik'].append({
-						'Ho': dbmodels.spieler.objects.filter(richtigeKlasse=x).count(),
 						'Bl': dbmodels.spieler.objects.filter(richtigeKlasseBl=x).count(),
 						'Dr': dbmodels.spieler.objects.filter(richtigeKlasseDr=x).count()
 					})
-				auswertung['richtigeKlasse'] = aSpieler.richtigeKlasse
 				auswertung['richtigeKlasseBl'] = aSpieler.richtigeKlasseBl
 				auswertung['richtigeKlasseDr'] = aSpieler.richtigeKlasseDr
 			return httpOutput(json.dumps(auswertung), mimetype='application/json; charset=utf-8')

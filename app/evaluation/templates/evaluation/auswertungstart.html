@@ -34,30 +34,13 @@
 					<th>Spieler Id</th>
 					<th>Spieler zeit</th>
 					<th>Spieler geburtsjahr</th>
-					<th>Spieler bioGesch</th>
-					<th>Spieler beruf</th>
+					<th>Spieler gesch</th>
+					<th>Spieler taetigkeit</th>
 					<th>Spieler wohnort</th>
 					<th>Spieler wohnortLeben</th>
-					<th>Spieler sprachenDialekte</th>
-					<th>Spieler weitere</th>
-					<th>Spieler wohnortVater</th>
-					<th>Spieler wohnortMutter</th>
-					<th>Spieler sprachlichErzogenVater</th>
-					<th>Spieler sprachlichErzogenMutter</th>
-					<th>Spieler dialektSelbst</th>
-					<th>Spieler dialektSelbstWelcher</th>
-					<th>Spieler dialektSprechen</th>
-					<th>Spieler dialektNutzen</th>
-					<th>Spieler hochdeutschSprechen</th>
-					<th>Spieler hochdeutschNutzen</th>
-					<th>Spieler alltagSprechen</th>
-					<th>Spieler bezeichnungSprechweise</th>
+					<th>Spieler wohnortEltern</th>
+					<th>Spieler erkannt</th>
 					<th>Spieler anmerkungen</th>
-					<th>Spieler dialektSympathisch</th>
-					<th>Spieler dialektSympathischWarum</th>
-					<th>Spieler dialektUnsympathisch</th>
-					<th>Spieler dialektUnsympathischWarum</th>
-					<th>Spieler gehoerteDialekte</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -82,30 +65,13 @@
 					<td>{{ auswertung.model.spiel.spieler.pk }}</td>
 					<td>{{ auswertung.model.spiel.spieler.zeit|date:"c" }}</td>
 					<td>{{ auswertung.model.spiel.spieler.geburtsjahr }}</td>
-					<td>{{ auswertung.model.spiel.spieler.bioGesch }}</td>
-					<td>{{ auswertung.model.spiel.spieler.beruf }}</td>
+					<td>{{ auswertung.model.spiel.spieler.gesch }}</td>
+					<td>{{ auswertung.model.spiel.spieler.taetigkeit }}</td>
 					<td>{{ auswertung.model.spiel.spieler.wohnort }}</td>
 					<td>{{ auswertung.model.spiel.spieler.wohnortLeben }}</td>
-					<td>{{ auswertung.model.spiel.spieler.sprachenDialekte }}</td>
-					<td>{{ auswertung.model.spiel.spieler.weitere }}</td>
-					<td>{{ auswertung.model.spiel.spieler.wohnortVater }}</td>
-					<td>{{ auswertung.model.spiel.spieler.wohnortMutter }}</td>
-					<td>{{ auswertung.model.spiel.spieler.sprachlichErzogenVater }}</td>
-					<td>{{ auswertung.model.spiel.spieler.sprachlichErzogenMutter }}</td>
-					<td>{{ auswertung.model.spiel.spieler.dialektSelbst }}</td>
-					<td>{{ auswertung.model.spiel.spieler.dialektSelbstWelcher }}</td>
-					<td>{{ auswertung.model.spiel.spieler.dialektSprechen }}</td>
-					<td>{{ auswertung.model.spiel.spieler.dialektNutzen }}</td>
-					<td>{{ auswertung.model.spiel.spieler.hochdeutschSprechen }}</td>
-					<td>{{ auswertung.model.spiel.spieler.hochdeutschNutzen }}</td>
-					<td>{{ auswertung.model.spiel.spieler.alltagSprechen }}</td>
-					<td>{{ auswertung.model.spiel.spieler.bezeichnungSprechweise }}</td>
+					<td>{{ auswertung.model.spiel.spieler.wohnortEltern }}</td>
+					<td>{{ auswertung.model.spiel.spieler.erkannt }}</td>
 					<td>{{ auswertung.model.spiel.spieler.anmerkungen }}</td>
-					<td>{{ auswertung.model.spiel.spieler.dialektSympathisch }}</td>
-					<td>{{ auswertung.model.spiel.spieler.dialektSympathischWarum }}</td>
-					<td>{{ auswertung.model.spiel.spieler.dialektUnsympathisch }}</td>
-					<td>{{ auswertung.model.spiel.spieler.dialektUnsympathischWarum }}</td>
-					<td>{{ auswertung.model.spiel.spieler.gehoerteDialekte }}</td>
 				</tr>
 			{% endfor %}
 			</tbody>
