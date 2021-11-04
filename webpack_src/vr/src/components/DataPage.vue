@@ -7,7 +7,7 @@
 		<div class="form-group p-relative">
 			<label>Welchem Geschlecht fühlen Sie sich zugehörig? *</label>
 			<div :class="'form-control' + ((error.gesch.error) ? ' is-invalid' : ' is-valid')" style="height: auto;">
-				<div class="form-check form-check-inline" v-for="(aCheck, aKey) in [{val: 1, title: 'männlich', id: 'srman'}, {val: 2, title: 'weiblich', id: 'srwoman'}, {val: 3, title: 'andere', id: 'srsonst'}]" :key="aKey">
+				<div class="form-check form-check-inline" v-for="(aCheck, aKey) in [{val: 1, title: 'männlich', id: 'srman'}, {val: 2, title: 'weiblich', id: 'srwoman'}, {val: 3, title: 'divers', id: 'srsonst'}]" :key="aKey">
 					<input v-model="daten.gesch" class="form-check-input" type="radio" name="inputgesch" :id="aCheck.id" :value="aCheck.val">
 					<label class="form-check-label" :for="aCheck.id">{{ aCheck.title }}</label>
 				</div>
@@ -34,7 +34,7 @@
 		</div>
 		<Wohnort v-model="daten.wohnort" :error="error.wohnort" :inputClass="((error.wohnort.error) ? ' is-invalid' : ' is-valid')" label="Wie lautet ihr aktueller Wohnort? *"/>
 		<Wohnort v-model="daten.wohnortLeben" :multi="true" :zeitraum="true" @changed="debouncedCheckErrors"  label="An welchen anderen Orten haben Sie gelebt?"/>
-		<Wohnort v-model="daten.wohnortEltern" :error="error.wohnortEltern" @changed="debouncedCheckErrors" :inputClass="((error.wohnortEltern.error) ? ' is-invalid' : ' is-valid')" :multi="true" :fix="true" label="Wo sind ihre Eltern aufgewachsen?"/>
+		<Wohnort v-model="daten.wohnortEltern" @changed="debouncedCheckErrors" :multi="true" :fix="true" label="Wo sind Ihre Eltern aufgewachsen?"/>
 
 		<div class="alert alert-primary mt-3" role="alert">
 			<h4 class="mb-3">Der SFB „Deutsch in Österreich“ behandelt Ihre Daten vertraulich und ausschließlich für wissenschaftliche Zwecke.</h4>
@@ -111,12 +111,12 @@ export default {
 				},
 				wohnort: {
 					check: function (val) { return val.ort && val.plz },
-					msg: 'Bitte geben Sie Ihren Wohnort mit gültiger Postleitzahl an!'
+					msg: 'Bitte geben Sie Ihren Wohnort mit Postleitzahl an!'
 				},
-				wohnortEltern: {
-					check: function (val) { return val[0].ort && val[0].plz },
-					msg: 'Bitte geben Sie den Wohnort Ihrer Eltern an!'
-				},
+				// wohnortEltern: {
+				// 	check: function (val) { return val[0].ort && val[0].plz },
+				// 	msg: 'Bitte geben Sie den Wohnort Ihrer Eltern an!'
+				// },
 				dsgvo: {
 					check: function (val) { return val },
 					msg: 'Bitte stimmen Sie der Verarbeitung Ihrer personenbezogenen Daten zu!'

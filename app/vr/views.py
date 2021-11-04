@@ -83,6 +83,10 @@ def data(request):
 			aAntwort.beispiel = aData['beispielNr']
 			aAntwort.wiedergaben = aData['played']
 			aAntwort.gewOrt = aData['selOrt']
+			if aData['nOeSel'] and len(aData['nOeSel']) > 1:
+				aAntwort.gewOrt = aData['nOeSel']
+				if aData['nOeTxt'].strip() and len(aData['nOeTxt'].strip()) > 1:
+					aAntwort.gewOrt = aData['nOeTxt'].strip()
 			aAntwort.hochdeutsch = aData['hochdeutsch']
 			aAntwort.orf = aData['orf']
 			aAntwort.pOrt = aData['pOrt']
@@ -126,6 +130,19 @@ def data(request):
 					auswertung['statistik'].append({
 						'Bl': dbmodels.spieler.objects.filter(richtigeKlasseBl=x).count(),
 						'Dr': dbmodels.spieler.objects.filter(richtigeKlasseDr=x).count()
+					})
+				auswertung['runden'] = []
+				for antwort in dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk):
+					auswertung['runden'].append({
+						'str': str(antwort),
+						'gewOrt': antwort.gewOrt,
+						'pOrt': antwort.pOrt,
+						'correctBl': antwort.correctBl,
+						'correctDr': antwort.correctDr,
+						'audiodatei': {
+							'file': antwort.audiodatei.file,
+							'ort': antwort.audiodatei.ort
+						}
 					})
 				auswertung['richtigeKlasseBl'] = aSpieler.richtigeKlasseBl
 				auswertung['richtigeKlasseDr'] = aSpieler.richtigeKlasseDr

@@ -3,10 +3,10 @@
 		<div class="card" v-if="gameData.game && !gameData.game.loading && gameData.game.ready && gameData.game.data">
 			<div class="card-header text-white bg-primary text-center">
 				<div class="d-flex mb-2">
-					<div class="mx-auto">Sprachbeispiel {{ beispielNr + 1 }} / {{ gameData.game.data['files'].length }}</div>
+					<h4 class="mx-auto">Sprachbeispiel {{ beispielNr + 1 }} / {{ gameData.game.data['files'].length }}</h4>
 				</div>
 				<button  type="button" class="btn btn-sm btn-light" disabled v-if="!loaded">Lade Audio ...</button>
-				<button @click="abspielen()" type="button" class="btn btn-sm btn-light" :disabled="playing" v-else-if="played < 2">{{ ((playing) ? 'Wiedergabe ...' : ((played === 0) ? 'Abspielen' : 'Noch ein letztes mal hören?')) }}</button>
+				<button @click="abspielen()" type="button" class="btn btn btn-light" :disabled="playing" v-else-if="played < 2">{{ ((playing) ? 'Wiedergabe ...' : ((played === 0) ? 'Abspielen' : 'Noch ein letztes mal hören?')) }}</button>
 				<button type="button" class="btn btn-sm btn-light" disabled v-else>Kann nur zwei mal angehört werden</button>
 			</div>
 			<div class="card-body" style="background: #eee;">
@@ -35,6 +35,26 @@
 				</div>
 			</div>
 			<div class="card-body">
+				<template v-if="selOrt === 'nicht aus Österreich'">
+					<div class="form-group p-relative">
+						<label class="w-100">Aus welchem anderen Land könnte die sprechende Person Ihrer Ansicht nach stammen?</label>
+						<div class="form-control">
+							<div class="form-check form-check-inline">
+								<input v-model="nOeSel" class="form-check-input" type="radio" name="inputgesch" id="checkNOeSel0" value="Deutschland">
+								<label class="form-check-label" for="checkNOeSel0">Deutschland</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input v-model="nOeSel" class="form-check-input" type="radio" name="inputgesch" id="checkNOeSel1" value="Schweiz">
+								<label class="form-check-label" for="checkNOeSel1">Schweiz</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input v-model="nOeSel" class="form-check-input" type="radio" name="inputgesch" id="checkNOeSel2" value="anderes Land">
+								<label class="form-check-label" for="checkNOeSel2">ein anderes Land, und zwar</label>
+							</div>
+							<input v-model="nOeTxt" type="text" class="form-check-inline" style="top:-3px;position:relative;" id="inputnOeTxt" :disabled="nOeSel !== 'anderes Land'">
+						</div>
+					</div>
+				</template>
 				<div class="form-group p-relative">
 					<label for="inputpOrt">Können Sie noch eine präzisere Angabe zur Herkunft der sprechenden Person innerhalb des Bundeslands geben?</label>
 					<input v-model="pOrt" type="text" class="form-control" id="inputpOrt" :disabled="played === 0">
@@ -68,6 +88,8 @@
 				beispielNr: 0,
 				played: 0,
 				pOrt: '',
+				nOeSel: '',
+				nOeTxt: '',
 				aufgefallen: '',
 				orf: 0,
 				hochdeutsch: 0,
@@ -102,6 +124,8 @@
 					}
 					this.played = 0
 					this.pOrt = ''
+					this.nOeSel = ''
+					this.nOeTxt = ''
 					this.aufgefallen = ''
 					this.orf = 0
 					this.hochdeutsch = 0
@@ -119,6 +143,8 @@
 					'selOrt': this.selOrt,
 					'orf': this.orf,
 					'pOrt': this.pOrt,
+					'nOeSel': this.selOrt === 'nicht aus Österreich' ? this.nOeSel : '',
+					'nOeTxt': this.selOrt === 'nicht aus Österreich' && this.nOeSel === 'anderes Land' ? this.nOeTxt : '',
 					'aufgefallen': this.aufgefallen,
 					'hochdeutsch': this.hochdeutsch,
 					'played': this.played,
@@ -156,13 +182,13 @@
 		},
 		mounted () {
 			this.$emit('getGameData', this.gameData)
-			// if (this.devMode) {
-			// 	this.beispielNr = 11
-			// 	this.played = 1
-			// 	this.selOrt = 'Niederösterreich'
-			// 	this.orf = 3
-			// 	this.hochdeutsch = 3
-			// }
+			if (this.devMode) {
+				this.beispielNr = 11
+				this.played = 1
+				this.selOrt = 'Niederösterreich'
+				this.orf = 3
+				this.hochdeutsch = 3
+			}
 			this.audio = this.$refs.audioplayer
 			this.audio.addEventListener('loadeddata', this.audioLoaded)
 			this.audio.addEventListener('pause', this.audioPlayPause)

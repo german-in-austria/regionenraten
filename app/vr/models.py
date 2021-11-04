@@ -25,7 +25,7 @@ class antworten(models.Model):
 	zeit				= models.DateTimeField(auto_now_add=True																, verbose_name="Zeit")
 	audiodatei	= models.ForeignKey('audiodatei'	, on_delete=models.CASCADE						, verbose_name="Audiodatei")
 	wiedergaben	= models.IntegerField(				  blank=True, null=True										, verbose_name="Wiedergaben")
-	gewOrt			= models.CharField(max_length=1024	, blank=True, null=True								, verbose_name="gewählter Ort")
+	gewOrt			= models.CharField(max_length=1024	, blank=True, null=True							, verbose_name="gewählter Ort")
 	hochdeutsch = models.IntegerField(				  blank=True, null=True										, verbose_name="Hochdeutsch (1-7)")
 	orf					= models.IntegerField(				  blank=True, null=True										, verbose_name="ORF (1-7)")
 	pOrt				= models.CharField(max_length=1024	, blank=True, null=True							, verbose_name="präzisere Herkunft")
