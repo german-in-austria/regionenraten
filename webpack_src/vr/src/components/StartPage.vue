@@ -2,7 +2,9 @@
 	<div class="text-center">
 		<h1>Regionenraten</h1>
 		<br>
-		<p>ToDo: Einführungstext ...</p>
+		<p>Wissen Sie immer sofort, woher eine Person stammt, wenn Sie mit ihr sprechen? Dann wird das folgende Quiz sicher eine leichte Übung für Sie!</p>
+		<p>Testen Sie ihr Sprachgefühl, messen Sie sich mit anderen Teilnehmenden und leisten Sie damit gleichzeitig einen wichtigen Beitrag zu unserer Forschung.</p>
+		<p>Wir wünschen Ihnen viel Spaß und bedanken uns herzlich für Ihre Teilnahme!</p>
 		<br>
 		<button @click="$emit('start')" type="button" class="btn btn-primary">Starten ...</button>
 	</div>
