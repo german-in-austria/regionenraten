@@ -7,7 +7,7 @@
 				</div>
 				<button  type="button" class="btn btn-sm btn-light" disabled v-if="!loaded">Lade Audio ...</button>
 				<button @click="abspielen()" type="button" class="btn btn btn-light" :disabled="playing" v-else-if="played < 2">{{ ((playing) ? 'Wiedergabe ...' : ((played === 0) ? 'Abspielen' : 'Noch ein letztes mal hören?')) }}</button>
-				<button type="button" class="btn btn-sm btn-light" disabled v-else>Kann nur zwei mal angehört werden</button>
+				<button type="button" class="btn btn-sm btn-light" disabled v-else>Kann nur zweimal angehört werden</button>
 			</div>
 			<div class="card-body" style="background: #eee;">
 				<svg viewBox="140 100 2800 1480">

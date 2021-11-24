@@ -2,7 +2,7 @@
 
 	<div class="text-center" v-if="site === 0">
 		<h1>Aufgabe</h1>
-		<p>Im folgenden Fragebogen wird Ihnen eine Reihe von Hörbeispielen verschiedener Sprecher*innen präsentiert. Dabei werden stets dieselben zwei Sätze vorgelesen. Ihre Aufgabe besteht darin, eine Vermutung zu äußern, woher die sprechenden Personen stammen könnten.</p>
+		<p>Im folgenden Fragebogen wird Ihnen eine Reihe von Hörbeispielen verschiedener Sprecher*innen präsentiert. Dabei werden stets dieselben zwei Sätze vorgelesen. Versuchen Sie zu erraten, woher die sprechenden Personen stammen! In der Auflösung am Ende können Sie sich ansehen, wie gut Sie abgeschnitten haben.</p>
 		<br>
 		<svg viewBox="140 100 2800 1480" style="width: 80%; max-width: 900px; height: auto;">
 			<g id="svg-layer-land">
@@ -35,17 +35,16 @@
 		<h1>Anleitung</h1>
 		<p>Und so geht’s:</p>
 		<p><b>1)	Gut zuhören!</b><br>
-		Hören Sie sich das Sprachbeispiel an.</p>
+			Hören Sie sich das Sprachbeispiel an.</p>
 		<p><b>2)	Richtig zuordnen!</b><br>
-		Klicken Sie auf den Ort, von dem Sie glaube, <br>
-		dass er der Heimatort des Sprechers/der Sprecherin ist.</p>
+			Klicken Sie auf das Bundesland,<br>
+			das Sie für die Heimat der sprechenden Person halten.
 		<p><b>3)	Sprachbeispiel bewerten!</b><br>
-		Beurteilen Sie, wie das Gehörte auf Sie wirkt.</p>
+			Beurteilen Sie, wie das Gehörte auf Sie wirkt.</p>
 		<p>Danach hören Sie auch schon das nächste Sprachbeispiel!</p>
 		<p><b>Gut zu wissen:</b><br>
-		Eine Runde besteht aus 2 x 6 Sprachbeispielen.<br>
-		Sie können sich jedes Sprachbeispiel zweimal anhören.<br>
-		Orte können in einer Runde auch mehrmals gewählt werden.</p>
+			Das Quiz besteht aus 12 Sprachbeispielen und dauert ca. 15 Minuten.<br>
+			Sie können sich jedes Sprachbeispiel zweimal anhören.</p>
 		<br>
 		<button @click="$emit('next')" type="button" class="btn btn-primary">Alles klar!</button>
 	</div>
