@@ -34,7 +34,7 @@
 		</div>
 		<Wohnort v-model="daten.wohnort" :error="error.wohnort" :inputClass="((error.wohnort.error) ? ' is-invalid' : ' is-valid')" label="Wie lautet ihr aktueller Wohnort? *"/>
 		<Wohnort v-model="daten.wohnortLeben" :multi="true" :zeitraum="true" @changed="debouncedCheckErrors"  label="An welchen anderen Orten haben Sie gelebt?"/>
-		<Wohnort v-model="daten.wohnortEltern" @changed="debouncedCheckErrors" :multi="true" :fix="true" label="Wo sind Ihre Eltern aufgewachsen?"/>
+		<Wohnort v-model="daten.wohnortEltern" :error="error.wohnortEltern" @changed="debouncedCheckErrors" :inputClass="((error.wohnortEltern.error) ? ' is-invalid' : ' is-valid')" :multi="true" :fix="true" label="Wo sind ihre Eltern aufgewachsen?"/>
 
 		<div class="alert alert-primary mt-3" role="alert">
 			<h4 class="mb-3">Der SFB „Deutsch in Österreich“ behandelt Ihre Daten vertraulich und ausschließlich für wissenschaftliche Zwecke.</h4>
@@ -113,10 +113,10 @@ export default {
 					check: function (val) { return val.ort && val.plz },
 					msg: 'Bitte geben Sie Ihren Wohnort mit Postleitzahl an!'
 				},
-				// wohnortEltern: {
-				// 	check: function (val) { return val[0].ort && val[0].plz },
-				// 	msg: 'Bitte geben Sie den Wohnort Ihrer Eltern an!'
-				// },
+				wohnortEltern: {
+					check: function (val) { return val[0].ort && val[0].plz },
+					msg: 'Bitte geben Sie den Wohnort Ihrer Eltern an!'
+				},
 				dsgvo: {
 					check: function (val) { return val },
 					msg: 'Bitte stimmen Sie der Verarbeitung Ihrer personenbezogenen Daten zu!'

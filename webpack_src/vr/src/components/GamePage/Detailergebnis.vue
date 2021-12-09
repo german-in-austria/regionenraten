@@ -3,8 +3,9 @@
 		<h1>Detailergebnis</h1>
 		<br>
 		<div v-if="auswertungsData.auswertung && auswertungsData.auswertung.ready && auswertungsData.auswertung.data">
+			<p>Wie Sie wahrscheinlich festgestellt haben, ist eine regionale Zuordnung anhand von vorgelesenem Text sehr schwierig. Ist es Ihnen dennoch gelungen, einen Großteil der Sprecher und Sprecherinnen richtig einzuordnen? Gratulation, Sie haben ein sehr gutes Ohr!</p>
 			<p>
-				<!-- <p>Sie haben <b>{{ auswertungsData.auswertung.data.antwortenRichtigDr }}</b> von <b>{{ auswertungsData.auswertung.data.antworten }}</b> Sprecherinnen und Sprechern richtig ihren <b>Dialektregionen</b> zugeordnet.<br> -->
+				<!-- Sie haben <b>{{ auswertungsData.auswertung.data.antwortenRichtigDr }}</b> von <b>{{ auswertungsData.auswertung.data.antworten }}</b> Sprecherinnen und Sprechern richtig ihren <b>Dialektregionen</b> zugeordnet.<br> -->
 				Sie haben <b>{{ auswertungsData.auswertung.data.antwortenRichtigBl }}</b> von <b>{{ auswertungsData.auswertung.data.antworten }}</b> Sprecherinnen und Sprechern richtig ihren <b>Bundesländern</b> zugeordnet.<br>
 			</p>
 			<p>Im Vergleich mit den anderen Spielenden liegen Sie hier:</p>
@@ -19,7 +20,7 @@
 					<g :transform="'translate(' + (40 + x * 80) + ' 180)'" v-for="(y, x) in auswertungsData.auswertung.data.statistik" :key="x + 'x' + y">
 						<rect x="-10" width="20" :y="0.5 + -180 / statistikMax.Bl * y.Bl" :height="180 / statistikMax.Bl * y.Bl" :class="'chart chartbl' + ((auswertungsData.auswertung.data.richtigeKlasseBl === x + 1) ? ' active' : '')"/>
 						<!-- <rect x="-13" width="10" :y="0.5 + -180 / statistikMax.Dr * y.Dr" :height="180 / statistikMax.Dr * y.Dr" :class="'chart chartdr' + ((auswertungsData.auswertung.data.richtigeKlasseDr === x + 1) ? ' active' : '')"/> -->
-						<text x="0" y="15" text-anchor="middle" style="font-size: 8px">{{ ['0%-20% richtig', '20%-40% richtig', '40%-60% richtig', '60%-80% richtig', '80%-100% richtig'][x] }}</text>
+						<text x="0" y="15" text-anchor="middle" :class="'corr-stat' + ((auswertungsData.auswertung.data.richtigeKlasseBl === x + 1) ? ' active' : '')">{{ ['0%-20% richtig', '20%-40% richtig', '40%-60% richtig', '60%-80% richtig', '80%-100% richtig'][x] }}</text>
 					</g>
 				</svg>
 			</div>
@@ -130,14 +131,20 @@
 		font-size: 60px;
 	}
 	rect.chartdr {
-		fill: #007bff;
+		fill: #28a745;
 	}
 	rect.chartbl {
-		fill: #28a745;
+		fill: #59a9ff;
 	}
 	rect.chart.active {
 		stroke-width: 1;
 		stroke: #dc3545;
+	}
+	.corr-stat {
+		font-size: 8px;
+	}
+	.corr-stat.active {
+		font-weight: bold;
 	}
 	.colbox {
 		display: inline-block;
