@@ -6,7 +6,9 @@
 		<p>Testen Sie ihr Sprachgefühl, messen Sie sich mit anderen Teilnehmenden und leisten Sie damit gleichzeitig einen wichtigen Beitrag zu unserer Forschung.</p>
 		<p>Wir wünschen Ihnen viel Spaß und bedanken uns herzlich für Ihre Teilnahme!</p>
 		<br>
-		<button @click="$emit('start')" type="button" class="btn btn-primary">Starten ...</button>
+		<button @click="$emit('start')" type="button" class="btn btn-primary">Starten ...</button><br>
+		<br>
+		<p><b>Achtung!</b> Im Safari-Browser treten gelegentlich Probleme beim Abspielen der Hörbeispiele auf, nutzen Sie nach Möglichkeit Chrome oder einen anderen Browser zur Teilnahme am Quiz.</p>
 	</div>
 </template>
 
